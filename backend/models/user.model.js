@@ -1,4 +1,4 @@
-import mongoose from mongoose;
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
         },
     ],
     connections: [{
-        type: mongoose.Schema.TYpes.ObjectId, ref: "User"
+        type: mongoose.Schema.Types.ObjectId, ref: "User"
     }]
 }, { timestamps: true })
 
