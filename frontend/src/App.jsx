@@ -14,7 +14,7 @@ function App() {
     queryKey: ['authUser'],
     queryFn: async () => {
       try {
-        const res = await axiosInstance("/auth/me");
+        const res = await axiosInstance.get("/auth/me");
         return res.data;
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -25,7 +25,7 @@ function App() {
     }
   })
   if (isLoading) return null;
-  
+
   return (
     <Layout>
       <Routes>
