@@ -94,11 +94,10 @@ export const logout = async (req, res) => {
 }
 
 export const getCurrentUser = async (req, res) => {
-    try {
-        const user = req.user;
-        res.status(200).json({ user });
-    } catch (error) {
-        console.log("Error in getCurrentUser controller: ", error);
-        res.status(500).json({message:"Internal server error"});
-    }
-}
+	try {
+		res.json(req.user);
+	} catch (error) {
+		console.error("Error in getCurrentUser controller:", error);
+		res.status(500).json({ message: "Internal Server error" });
+	}
+};
