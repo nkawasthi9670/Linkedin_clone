@@ -69,7 +69,7 @@ export const deletePost=async(req,res)=>{
 
 export const getPostById=async(req,res)=>{
     try {
-        const postId=req.params;
+        const postId=req.params.id;
         const post=await Post.findById(postId)
         .populate("author","name username profilePicture headline")
         .populate("comments.user","name profilePicture username headline");
