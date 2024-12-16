@@ -11,6 +11,7 @@ import { axiosInstance } from "./lib/axios";
 import NotificationPage from "./pages/NotificationPage";
 import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
+import ProfilePage from "./pages/ProfilePage";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
 				<Route path="/notifications" element={authUser ? <NotificationPage /> : <Navigate to={"/login"} />} />
 				<Route path="/network" element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />} />
 				<Route path="/post/:postId" element={authUser ? <PostPage /> : <Navigate to={"/login"} />} />
+				<Route path="/profile/:username" element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
 			</Routes>
 			<Toaster />
 		</Layout>
