@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
+import NotificationPage from "./pages/NotificationPage";
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
 		queryKey: ["authUser"],
 		queryFn: async () => {
 			try {
-				const res =await axiosInstance.get("/auth/me");
+				const res = await axiosInstance.get("/auth/me");
 				return res.data;
 			} catch (err) {
 				if (err.response && err.response.status === 401) {
@@ -34,6 +35,7 @@ function App() {
 				<Route path='/' element={authUser ? <HomePage /> : <Navigate to={"/login"} />} />
 				<Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={"/"} />} />
+				<Route path="/notifications" element={authUser ? <NotificationPage /> : <Navigate to={"/login"} />} />
 			</Routes>
 			<Toaster />
 		</Layout>
