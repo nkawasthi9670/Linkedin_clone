@@ -3,25 +3,39 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 
 import ProfileHeader from "../components/ProfileHeader";
-import AboutSection from "../components/AboutSection";
-import ExperienceSection from "../components/ExperienceSection";
-import EducationSection from "../components/EducationSection";
-import SkillsSection from "../components/SkillsSection";
 import toast from "react-hot-toast";
+import BioSection from "../components/AboutSection";
+import Post from "../components/Post";
 
 const ProfilePage = () => {
 	const { username } = useParams();
 	const queryClient = useQueryClient();
 
+	// Get logged in user
 	const { data: authUser, isLoading } = useQuery({
 		queryKey: ["authUser"],
 	});
 
+	// Get profile user data
 	const { data: userProfile, isLoading: isUserProfileLoading } = useQuery({
 		queryKey: ["userProfile", username],
 		queryFn: () => axiosInstance.get(`/users/${username}`),
 	});
 
+	// ✅ Get posts of the user
+	const userId = userProfile?.data?._id;
+
+	const {
+		data: postsData,
+		isLoading: postsLoading,
+		isError: postsError,
+	} = useQuery({
+		queryKey: ["userPosts", userId],
+		queryFn: () => axiosInstance.get(`/posts/user/${userId}`).then((res) => res.data),
+		enabled: !!userId,
+	});
+
+	// Profile update
 	const { mutate: updateProfile } = useMutation({
 		mutationFn: async (updatedData) => {
 			await axiosInstance.put("/users/profile", updatedData);
@@ -42,13 +56,27 @@ const ProfilePage = () => {
 	};
 
 	return (
-		<div className='max-w-4xl mx-auto p-4'>
+		<div className="max-w-4xl mx-auto p-4 space-y-4">
 			<ProfileHeader userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
-			<AboutSection userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
-			<ExperienceSection userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
-			<EducationSection userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
-			<SkillsSection userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
+			
+			<BioSection userData={userData} isOwnProfile={isOwnProfile} onSave={handleSave} />
+
+			<div className="mt-6 space-y-4">
+				<h2 className="text-xl font-semibold">Posts</h2>
+				{postsLoading ? (
+					<p>Loading posts...</p>
+				) : postsError ? (
+					<p>Failed to load posts.</p>
+				) : postsData.length > 0 ? (
+					postsData.map((post) => (
+						<Post key={post._id} post={post} />
+					))
+				) : (
+					<p>No posts found.</p>
+				)}
+			</div>
 		</div>
 	);
 };
+
 export default ProfilePage;

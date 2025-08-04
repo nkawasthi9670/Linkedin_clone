@@ -201,7 +201,11 @@ const ProfileHeader = ({ userData, onSave, isOwnProfile }) => {
 							className='text-2xl font-bold mb-2 text-center w-full'
 						/>
 					) : (
-						<h1 className='text-2xl font-bold mb-2'>{userData.name}</h1>
+						 <>
+                               <h1 className='text-2xl font-bold mb-2'>{userData.name}</h1>
+                               <p className="text-gray-600 text-sm mt-[-12px] ml-2">{userData.email}</p>
+                         </>
+
 					)}
 
 					{isEditing ? (

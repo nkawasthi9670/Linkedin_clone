@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AboutSection = ({ userData, isOwnProfile, onSave }) => {
+const BioSection = ({ userData, isOwnProfile, onSave }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [about, setAbout] = useState(userData.about || "");
 
@@ -10,7 +10,7 @@ const AboutSection = ({ userData, isOwnProfile, onSave }) => {
 	};
 	return (
 		<div className='bg-white shadow rounded-lg p-6 mb-6'>
-			<h2 className='text-xl font-semibold mb-4'>About</h2>
+			<h2 className='text-xl font-semibold mb-4'>Bio</h2>
 			{isOwnProfile && (
 				<>
 					{isEditing ? (
@@ -45,4 +45,4 @@ const AboutSection = ({ userData, isOwnProfile, onSave }) => {
 		</div>
 	);
 };
-export default AboutSection;
+export default BioSection;

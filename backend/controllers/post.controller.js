@@ -16,30 +16,22 @@ export const getFeedPosts=async(req,res)=>{
     }
 }
 
-export const createPost=async(req,res)=>{
+export const createPost = async (req, res) => {
     try {
-        const {content, image}=req.body;
-        let newPost;
-        if(image){
-            const imgResult=await cloudinary.uploader.upload(image);
-            newPost=new Post({
-                author:req.user._id,
-                content,
-                image:imgResult.secure_url,
-            })
-        }else{
-            newPost=new Post({
-                author:req.user._id,
-                content
-            })
-        }
+        const { content } = req.body;
+
+        const newPost = new Post({
+            author: req.user._id,
+            content
+        });
+
         await newPost.save();
         res.status(200).json(newPost);
     } catch (error) {
-        console.log("Error in createPost controller: ",error);
-        res.status(500).json({message:"Internal server error"});
+        console.log("Error in createPost controller: ", error);
+        res.status(500).json({ message: "Internal server error" });
     }
-}
+};
 
 export const deletePost=async(req,res)=>{
     try {
@@ -140,3 +132,18 @@ export const likePost=async(req,res)=>{
         res.status(500).json({message:"Internal server error"});
     }
 }
+
+export const getUserPosts = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        const posts = await Post.find({ author: userId })
+            .populate("author", "name username email profilePicture headline")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(posts);
+    } catch (error) {
+        console.log("Error in getUserPosts controller: ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
